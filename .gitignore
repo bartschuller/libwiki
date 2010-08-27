@@ -1,0 +1,11 @@
+target
+*.iml
+*.ipr
+*.iws
+project/boot
+project/build/target
+project/plugins/lib_managed
+project/plugins/src_managed
+project/plugins/target
+project/plugins/project
+lib_managed

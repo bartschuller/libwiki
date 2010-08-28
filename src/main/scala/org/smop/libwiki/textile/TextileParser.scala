@@ -11,10 +11,13 @@ class TextileParsers extends RegexParsers {
           { case n~content => Elem(null, "h"+n, Null, TopScope, content: _*)}
   def para: Parser[NodeSeq] = lines ^^ (x => <p>{x}</p>)
   def eol: Parser[Any] = """\r?\n""".r
-  def lines: Parser[NodeSeq] = ((rep1sep("""\S.*""".r, eol) ^^
-          (_.flatMap(Text(_): NodeSeq).reduceLeft((_ : NodeSeq) ++ <br/> ++ _))) ^^
+  def lines: Parser[NodeSeq] = ((rep1sep(inline, eol) ^^
+          (_.reduceLeft((_ : NodeSeq) ++ <br/> ++ _))) ^^
           ( x => x.reduceLeft((_: NodeSeq) ++ _))) <~ rep(eol)
-
+  def inline: Parser[NodeSeq] = italic | emphasis |plaintext //  bold | strong |
+  def plaintext = """\S.*(?<!_)""".r ^^ (Text(_))
+  def italic = "__" ~> (inline ^^ (x => <i>{x}</i>)) <~ "__"
+  def emphasis = "_" ~> (inline ^^ (x => <em>{x}</em>)) <~ "_"
 }
 
 object TextileParser extends TextileParsers {

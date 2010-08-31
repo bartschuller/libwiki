@@ -31,5 +31,8 @@ object TextileSpec extends Specification {
     "strong" in {
       TextileParser.parseDoc("*Hello*") must ==/(<p><strong>Hello</strong></p>)
     }
+    "unordered lists" in {
+      TextileParser.parseDoc("* Hello\n* there") must ==/(<ul><li>Hello</li><li>there</li></ul>)
+    }
   }
 }
